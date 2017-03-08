@@ -20,7 +20,7 @@ def base():
                 break
             elif buf == b'#OK':
                 print('Recive OK')
-            time.sleep(2)
+            time.sleep(2) # Set your heart beat delay, 1 min is recommended.
         except KeyboardInterrupt:
             sys.exit(1)
 
