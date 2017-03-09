@@ -68,9 +68,9 @@ if __name__ == '__main__':
     import threading
     # Add your transport serves here
     ts = []
-    ts.append(threading.Thread(target=proxy_server,args=(22,2222,)))
-    #ts.append(threading.Thread(target=proxy_server,args=(5901,5910,)))
-    #ts.append(threading.Thread(target=proxy_server,args=(5902,5920,)))
+    ports = [(22,2222),(2080,80)] # Add your ports here
+    for p1, p2 in ports:
+        ts.append(threading.Thread(target=proxy_server,args=(p1,p2,)))
     for t in ts:
         t.setDaemon(True)
         t.start()
@@ -85,11 +85,12 @@ if __name__ == '__main__':
     while True:
         try:
             # Check if port is opened, if not, reconnect
-            if not is_open(HOST, 2222):
-                t = threading.Thread(target=proxy_server,args=(2002,80,))
-                t.setDaemon(True)
-                t.start()
-                print('80 port reconnected')
+            for p1, p2 in ports:
+                if not is_open(HOST, p2):
+                    t = threading.Thread(target=proxy_server,args=(p1,p2,))
+                    t.setDaemon(True)
+                    t.start()
+                    print('port %d is reconnected' % p2)
             # Check heart beat
             message, address = s.recvfrom(5)
             if message == b'#Hi':
