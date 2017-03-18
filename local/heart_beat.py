@@ -2,8 +2,8 @@
 import socket, sys, time
 
 def heart_beat():
-    HOST = '' # Your remote server IP
-    PORT = 2010 # Your remote server port
+    HOST = ''    # Your remote server IP
+    PORT = 2010    # Your remote server port
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     try:
         port = int(PORT)
