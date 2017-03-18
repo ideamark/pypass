@@ -15,11 +15,6 @@ def heart_beat():
         try:
             s.sendall(b'#Hi')
             print('Send a heart beat')
-            buf = s.recv(5)
-            if not len(buf):
-                break
-            elif buf == b'#OK':
-                print('Recive OK')
             time.sleep(60)    # Set your heart beat delay, 1 min is recommended.
         except KeyboardInterrupt:
             sys.exit(1)

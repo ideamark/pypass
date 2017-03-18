@@ -92,9 +92,6 @@ if __name__ == '__main__':
                 f.write(home_ip)
                 f.close()
                 print('home ip is written')
-                message = bytes('#OK',encoding = 'utf-8')
-                s.sendto(message, address)
-                print('Return OK')
 
             # Check if port is opened, if not, reconnect
             for p1, p2 in ports:
