@@ -20,9 +20,11 @@ def heart_beat():
                 break
             elif buf == b'#OK':
                 print('Recive OK')
-            time.sleep(60) # Set your heart beat delay, 1 min is recommended.
+            time.sleep(60)    # Set your heart beat delay, 1 min is recommended.
         except KeyboardInterrupt:
             sys.exit(1)
+        except:
+            continue
 
 if __name__ == '__main__':
     print('Start heart beat...')
