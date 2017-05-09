@@ -17,7 +17,7 @@ def heart_beat():
             s.sendall(b'#Hi')
             count += 1
             print('Send a heart beat', count)
-            time.sleep(30)    # Set your heart beat delay
+            time.sleep(10)    # Set your heart beat delay
         except KeyboardInterrupt:
             sys.exit(1)
         except:
