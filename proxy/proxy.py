@@ -47,7 +47,7 @@ def proxy_server(proxy_ip, home_port, proxy_port):
     f = open('home_ip.txt','r')
     home_ip = f.read().replace('\n','')
     f.close()
-    proxyData = (home_ip,home_port),(proxy_ip,proxy_port)
+    proxyData = ((home_ip,home_port),(proxy_ip,proxy_port))
     try:
         Proxy(proxyData).serve_forever()
     except (AttributeError):
