@@ -15,11 +15,11 @@ class Proxy:
         self.proxy = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
         try:
             self.proxy.bind(self.home_addr)
-            self.proxy.listen(10)
-            self.inputs = [self.proxy]
-            self.route = {}
         except (OSError):
             print(home_addr, 'Already in use')
+        self.proxy.listen(10)
+        self.inputs = [self.proxy]
+        self.route = {}
 
     def serve_forever(self):
         print(self.proxy_addr,self.home_addr,'listen...')
@@ -51,8 +51,8 @@ class Proxy:
                 del self.route[s]
                 s.shutdown(2)
                 s.close()
-        except (AttributeError):
-            print(self.home_addr, 'Not connected')
+        except (AttributeError, KeyError):
+            print(self.home_addr, 'Can not remove')
 
 def proxy_server(proxy_ip, home_port, proxy_port):
     f = open('home_ip.txt','r')
@@ -60,7 +60,7 @@ def proxy_server(proxy_ip, home_port, proxy_port):
     f.close()
     try:
         Proxy((home_ip,home_port),(proxy_ip,proxy_port)).serve_forever()
-    except KeyboardInterrupt:
+    except (KeyboardInterrupt):
         sys.exit(1)
 
 def is_open(ip, port):
