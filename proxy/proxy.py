@@ -42,11 +42,14 @@ class Proxy:
         self.route[forward] = client
 
     def __del__(self):
-        for s in self.sock, self.route[self.sock]:
-            self.inputs.remove(s)
-            del self.route[s]
-            s.shutdown(2)
-            s.close()
+        try:
+            for s in self.sock, self.route[self.sock]:
+                self.inputs.remove(s)
+                del self.route[s]
+                s.shutdown(2)
+                s.close()
+        except (AttributeError):
+            print(self.home_addr, 'Could not connect')
 
 def proxy_server(proxy_ip, home_port, proxy_port):
     f = open('home_ip.txt','r')
@@ -54,8 +57,6 @@ def proxy_server(proxy_ip, home_port, proxy_port):
     f.close()
     try:
         Proxy((home_ip,home_port),(proxy_ip,proxy_port)).serve_forever()
-    except (AttributeError):
-        print((home_port, proxy_port), 'Could not connect')
     except KeyboardInterrupt:
         sys.exit(1)
 
