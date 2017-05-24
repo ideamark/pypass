@@ -1,4 +1,9 @@
 #!/usr/bin/env python3
+"""
+Confige:
+1. add server ip to HOST
+2. add transfer port to ports[]
+"""
 import sys, os
 import socket, select
 import time
@@ -47,11 +52,10 @@ def proxy_server(proxy_ip, home_port, proxy_port):
     f = open('home_ip.txt','r')
     home_ip = f.read().replace('\n','')
     f.close()
-    proxyData = ((home_ip,home_port),(proxy_ip,proxy_port))
     try:
-        Proxy(proxyData).serve_forever()
+        Proxy((home_ip,home_port),(proxy_ip,proxy_port)).serve_forever()
     except (AttributeError):
-        print(proxyData, 'Could not connect')
+        print((home_port, proxy_port), 'Could not connect')
     except KeyboardInterrupt:
         sys.exit(1)
 
