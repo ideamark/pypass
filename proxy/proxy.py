@@ -10,39 +10,45 @@ import time
 
 class Proxy:
     def __init__(self, proxy_addr, home_addr):
-        self.home_addr = home_addr
-        self.proxy_addr = proxy_addr
-        self.proxy = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
         try:
+            self.home_addr = home_addr
+            self.proxy_addr = proxy_addr
+            self.proxy = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
             self.proxy.bind(self.home_addr)
-        except (OSError):
-            print(home_addr, 'Already in use')
-        self.proxy.listen(10)
-        self.inputs = [self.proxy]
-        self.route = {}
+            self.proxy.listen(10)
+            self.inputs = [self.proxy]
+            self.route = {}
+        except:
+            pass
 
     def serve_forever(self):
-        print(self.proxy_addr,self.home_addr,'listen...')
-        while True:
-            readable, _, _ = select.select(self.inputs, [], [])
-            for self.sock in readable:
-                if self.sock == self.proxy:
-                    self.on_join()
-                else:
-                    data = self.sock.recv(8096)
-                    if not data:
-                        self.__del__()
+        try:
+            print(self.proxy_addr,self.home_addr,'listen...')
+            while True:
+                readable, _, _ = select.select(self.inputs, [], [])
+                for self.sock in readable:
+                    if self.sock == self.proxy:
+                        self.on_join()
                     else:
-                        self.route[self.sock].send(data)
+                        data = self.sock.recv(8096)
+                        if not data:
+                            self.__del__()
+                        else:
+                            self.route[self.sock].send(data)
+        except:
+            pass
 
     def on_join(self):
-        client, addr = self.proxy.accept()
-        print(addr,'connect')
-        forward = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        forward.connect(self.proxy_addr)
-        self.inputs += [client, forward]
-        self.route[client] = forward
-        self.route[forward] = client
+        try:
+            client, addr = self.proxy.accept()
+            print(addr,'connect')
+            forward = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            forward.connect(self.proxy_addr)
+            self.inputs += [client, forward]
+            self.route[client] = forward
+            self.route[forward] = client
+        except:
+            pass
 
     def __del__(self):
         try:
@@ -51,17 +57,20 @@ class Proxy:
                 del self.route[s]
                 s.shutdown(2)
                 s.close()
-        except (AttributeError, KeyError):
-            print(self.home_addr, 'Can not remove')
+        except:
+            pass
 
 def proxy_server(proxy_ip, home_port, proxy_port):
-    f = open('home_ip.txt','r')
-    home_ip = f.read().replace('\n','')
-    f.close()
     try:
-        Proxy((home_ip,home_port),(proxy_ip,proxy_port)).serve_forever()
-    except (KeyboardInterrupt):
-        sys.exit(1)
+        f = open('home_ip.txt','r')
+        home_ip = f.read().replace('\n','')
+        f.close()
+        try:
+            Proxy((home_ip,home_port),(proxy_ip,proxy_port)).serve_forever()
+        except (KeyboardInterrupt):
+            sys.exit(1)
+    except:
+        pass
 
 def is_open(ip, port):
     s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
@@ -78,39 +87,42 @@ if __name__ == '__main__':
     HOST = ''    # Your remote server IP
     PORT = 2010    # Your remote server port for heart beat
 
-    import threading
-    ts = []
-    ports = [(22,2222),(2080,80)]    # Add your ports here
-    for p1, p2 in ports:
-        ts.append(threading.Thread(target=proxy_server,args=(HOST,p1,p2,)))
-    for t in ts:
-        t.setDaemon(True)
-        t.start()
-    time.sleep(1)
-
-    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    s.bind((HOST, PORT))
-    print('Start reciving heart beat ...')
-    while True:
-        try:
-            # Check heart beat
-            message, address = s.recvfrom(5)
-            if message == b'#Hi':
-                print('Got a heart beat')
-                home_ip = str(address[0])
-                f = open('home_ip.txt','w')
-                f.write(home_ip)
-                f.close()
-                print('home ip is written')
-
-            # Check if port is opened, if not, reconnect
-            for p1, p2 in ports:
-                if not is_open(HOST, p2):
-                    t = threading.Thread(target=proxy_server,args=(HOST,p1,p2,))
-                    t.setDaemon(True)
-                    t.start()
-                    print('port %d is reconnected' % p2)
-
-        except (KeyboardInterrupt, SystemExit):
-            raise
+    try:
+        import threading
+        ts = []
+        ports = [(22,2222),(2080,80)]    # Add your ports here
+        for p1, p2 in ports:
+            ts.append(threading.Thread(target=proxy_server,args=(HOST,p1,p2,)))
+        for t in ts:
+            t.setDaemon(True)
+            t.start()
+        time.sleep(1)
+    
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        s.bind((HOST, PORT))
+        print('Start reciving heart beat ...')
+        while True:
+            try:
+                # Check heart beat
+                message, address = s.recvfrom(5)
+                if message == b'#Hi':
+                    print('Got a heart beat')
+                    home_ip = str(address[0])
+                    f = open('home_ip.txt','w')
+                    f.write(home_ip)
+                    f.close()
+                    print('home ip is written')
+    
+                # Check if port is opened, if not, reconnect
+                for p1, p2 in ports:
+                    if not is_open(HOST, p2):
+                        t = threading.Thread(target=proxy_server,args=(HOST,p1,p2,))
+                        t.setDaemon(True)
+                        t.start()
+                        print('port %d is reconnected' % p2)
+    
+            except (KeyboardInterrupt, SystemExit):
+                sys.exit(1)
+    except:
+        pass
