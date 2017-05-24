@@ -13,10 +13,13 @@ class Proxy:
         self.home_addr = home_addr
         self.proxy_addr = proxy_addr
         self.proxy = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-        self.proxy.bind(self.home_addr)
-        self.proxy.listen(10)
-        self.inputs = [self.proxy]
-        self.route = {}
+        try:
+            self.proxy.bind(self.home_addr)
+            self.proxy.listen(10)
+            self.inputs = [self.proxy]
+            self.route = {}
+        except (OSError):
+            print(home_addr, 'Already in use')
 
     def serve_forever(self):
         print(self.proxy_addr,self.home_addr,'listen...')
@@ -49,7 +52,7 @@ class Proxy:
                 s.shutdown(2)
                 s.close()
         except (AttributeError):
-            print(self.home_addr, 'Could not connect')
+            print(self.home_addr, 'Not connected')
 
 def proxy_server(proxy_ip, home_port, proxy_port):
     f = open('home_ip.txt','r')
