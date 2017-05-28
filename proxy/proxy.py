@@ -17,7 +17,7 @@ class Proxy:
             self.home_addr = home_addr
             self.proxy_addr = proxy_addr
             self.proxy = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-            self.proxy.bind(self.home_addr)
+            self.proxy.bind(self.proxy_addr)
             self.proxy.listen(10)
             self.inputs = [self.proxy]
             self.route = {}
@@ -25,7 +25,7 @@ class Proxy:
             pass
 
     def serve_forever(self):
-        print(self.proxy_addr,self.home_addr,'listen...')
+        print(self.home_addr,self.proxy_addr,'listen...')
         while True:
             try:
                 readable, _, _ = select.select(self.inputs, [], [])
@@ -46,7 +46,7 @@ class Proxy:
             client, addr = self.proxy.accept()
             print(addr,'connect')
             forward = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            forward.connect(self.proxy_addr)
+            forward.connect(self.home_addr)
             self.inputs += [client, forward]
             self.route[client] = forward
             self.route[forward] = client
