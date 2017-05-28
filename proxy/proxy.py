@@ -5,14 +5,14 @@ import time
 
 # First Configure
 try:
-    HOST = ''    # Your remote server IP, type is string
-    PORT =     # Your remote server port for heart beat, type is int
-    PROXY_LIST = [(,),(,)]    # Add your proxy prots and local ports here
+    HOST = ''    # Your remote server IP, the type is string
+    PORT =     # Your remote server port for heart beat, the type is int
+    PROXY_LIST = [(,),(,)]    # Add your (local prot, remote port) here
 except:
-    print('proxy.py configure error')
+    print('Configure Value Error')
 
 class Proxy:
-    def __init__(self, proxy_addr, home_addr):
+    def __init__(self, home_addr, proxy_addr):
         try:
             self.home_addr = home_addr
             self.proxy_addr = proxy_addr
@@ -25,9 +25,9 @@ class Proxy:
             pass
 
     def serve_forever(self):
-        try:
-            print(self.proxy_addr,self.home_addr,'listen...')
-            while True:
+        print(self.proxy_addr,self.home_addr,'listen...')
+        while True:
+            try:
                 readable, _, _ = select.select(self.inputs, [], [])
                 for self.sock in readable:
                     if self.sock == self.proxy:
@@ -38,8 +38,8 @@ class Proxy:
                             self.__del__()
                         else:
                             self.route[self.sock].send(data)
-        except:
-            pass
+            except:
+                pass
 
     def on_join(self):
         try:
@@ -68,12 +68,12 @@ def proxy_server(proxy_ip, home_port, proxy_port):
         f = open('home_ip.txt','r')
         home_ip = f.read().replace('\n','')
         f.close()
-        try:
-            Proxy((home_ip,home_port),(proxy_ip,proxy_port)).serve_forever()
-        except (KeyboardInterrupt):
-            sys.exit(1)
     except:
-        pass
+        print('Read Home IP Error')
+    try:
+        Proxy((home_ip,home_port),(proxy_ip,proxy_port)).serve_forever()
+    except (KeyboardInterrupt):
+        sys.exit(1)
 
 def is_open(ip, port):
     s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)

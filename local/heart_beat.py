@@ -3,10 +3,10 @@ import socket, sys, time
 
 # First configure
 try:
-    HOST = ''    # Your remote server IP, type is string
-    PORT =     # Your remote server port, type is int
+    HOST = ''    # Your remote server IP, the type is string
+    PORT =     # Your remote server port, the type is int
 except:
-    print('heart_beat.py configure error')
+    print('Configure Value Error')
 
 def heart_beat():
     count = 0
