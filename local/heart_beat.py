@@ -1,9 +1,14 @@
 #!/usr/bin/env python3
 import socket, sys, time
 
+# First configure
+try:
+    HOST = ''    # Your remote server IP, type is string
+    PORT =     # Your remote server port, type is int
+except:
+    print('heart_beat.py configure error')
+
 def heart_beat():
-    HOST = ''    # Your remote server IP
-    PORT = 2010    # Your remote server port
     count = 0
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     try:

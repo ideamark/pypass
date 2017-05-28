@@ -6,9 +6,8 @@
 
 ## How to use
 * First, you should have an independent IP server as your remote server, like Aliyun ECS or other VPS. And scp the proxy folder to your remote server.
-* Second, Enter your local server's public IP into proxy/home_ip.txt. You can search the key word "IP" by Baidu to get the public IP. PS: This step only do once, after that the proxy.py could write the public IP into home_ip.txt automatically. 
-* Third, enter the remote server's IP into proxy.py and heart_beat.py.
-* Finally, run proxy.py on your remote server and run heart_beat.py on your local server.
+* Then, enter the configure value in the heart_beat.py and proxy.py. 
+* Finally, run heart_beat.py on your local server and run proxy.py on your remote server, wait for the heart beat send to proxy.py, if it displays "Got a heart beat" and "home ip is written", it means connection is succeeded. 
 
 ## how to execute when boot up
 * Add this to /etc/rc.local before "exit 0":

@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
-"""
-Confige:
-1. add server ip to HOST
-2. add transfer port to ports[]
-"""
 import sys, os
 import socket, select
 import time
+
+# First Configure
+try:
+    HOST = ''    # Your remote server IP, type is string
+    PORT =     # Your remote server port for heart beat, type is int
+    PROXY_LIST = [(,),(,)]    # Add your proxy prots and local ports here
+except:
+    print('proxy.py configure error')
 
 class Proxy:
     def __init__(self, proxy_addr, home_addr):
@@ -84,14 +87,10 @@ def is_open(ip, port):
         return False
 
 if __name__ == '__main__':
-    HOST = ''    # Your remote server IP
-    PORT = 2010    # Your remote server port for heart beat
-
     try:
         import threading
         ts = []
-        ports = [(22,2222),(2080,80)]    # Add your ports here
-        for p1, p2 in ports:
+        for p1, p2 in PROXY_LIST:
             ts.append(threading.Thread(target=proxy_server,args=(HOST,p1,p2,)))
         for t in ts:
             t.setDaemon(True)
@@ -115,7 +114,7 @@ if __name__ == '__main__':
                     print('home ip is written')
     
                 # Check if port is opened, if not, reconnect
-                for p1, p2 in ports:
+                for p1, p2 in PROXY_LIST:
                     if not is_open(HOST, p2):
                         t = threading.Thread(target=proxy_server,args=(HOST,p1,p2,))
                         t.setDaemon(True)
