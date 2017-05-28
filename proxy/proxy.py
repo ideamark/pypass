@@ -63,15 +63,12 @@ class Proxy:
         except:
             pass
 
-def proxy_server(proxy_ip, home_port, proxy_port):
+def proxy_server(home_port, proxy_port):
+    f = open('home_ip.txt','r')
+    home_ip = f.read().replace('\n','')
+    f.close()
     try:
-        f = open('home_ip.txt','r')
-        home_ip = f.read().replace('\n','')
-        f.close()
-    except:
-        print('Read Home IP Error')
-    try:
-        Proxy((home_ip,home_port),(proxy_ip,proxy_port)).serve_forever()
+        Proxy((home_ip,home_port),(HOST,proxy_port)).serve_forever()
     except (KeyboardInterrupt):
         sys.exit(1)
 
@@ -91,7 +88,7 @@ if __name__ == '__main__':
         import threading
         ts = []
         for p1, p2 in PROXY_LIST:
-            ts.append(threading.Thread(target=proxy_server,args=(HOST,p1,p2,)))
+            ts.append(threading.Thread(target=proxy_server,args=(p1,p2,)))
         for t in ts:
             t.setDaemon(True)
             t.start()
@@ -101,6 +98,7 @@ if __name__ == '__main__':
         s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         s.bind((HOST, PORT))
         print('Start reciving heart beat ...')
+
         while True:
             try:
                 # Check heart beat
@@ -116,7 +114,7 @@ if __name__ == '__main__':
                 # Check if port is opened, if not, reconnect
                 for p1, p2 in PROXY_LIST:
                     if not is_open(HOST, p2):
-                        t = threading.Thread(target=proxy_server,args=(HOST,p1,p2,))
+                        t = threading.Thread(target=proxy_server,args=(p1,p2,))
                         t.setDaemon(True)
                         t.start()
                         print('port %d is reconnected' % p2)
