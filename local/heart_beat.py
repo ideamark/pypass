@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-import socket, sys, time
+import socket
+import sys
+import time
+
 
 # First configure
 try:
@@ -7,6 +10,7 @@ try:
     PORT =     # Your remote server port, the type is int
 except:
     print('Configure Value Error')
+
 
 def heart_beat():
     count = 0
@@ -17,6 +21,7 @@ def heart_beat():
         port = socket.getservbyname(PORT, 'udp')
     s.connect((HOST, port))
     s.settimeout(5)
+
     while True:
         try:
             s.sendall(b'#Hi')
@@ -25,8 +30,9 @@ def heart_beat():
             time.sleep(10)    # Set your heart beat delay
         except KeyboardInterrupt:
             sys.exit(1)
-        except:
+        except Exception:
             continue
+
 
 if __name__ == '__main__':
     print('Start heart beat...')
