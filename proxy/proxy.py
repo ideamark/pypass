@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import os
 import select
-import socke
+import socket
 import sys
 import time
 
@@ -10,12 +10,12 @@ import time
 try:
     HOST = ''    # Your remote server IP, the type is string
     PORT =     # Your remote server port for heart beat, the type is int
-    PROXY_LIST = [(,),(,)]    # Add your (local prot, remote port) here
+    PROXY_LIST = [(,), (,)]    # Add your (local prot, remote port) here
 except:
     print('Configure Value Error')
 
 
-class Proxy(Object):
+class Proxy(object):
 
     def __init__(self, home_addr, proxy_addr):
         self.home_addr = home_addr
