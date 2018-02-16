@@ -58,11 +58,11 @@ class Remote(object):
 
 
 def remote_server(local_port, remote_port):
-    f = open('local_ip.txt','r')
-    local_ip = f.read().replace('\n','')
+    f = open('ip.txt','r')
+    ip = f.read().replace('\n','')
     f.close()
     try:
-        Remote((local_ip,local_port),(HOST,remote_port)).serve_forever()
+        Remote((ip,local_port),(HOST,remote_port)).serve_forever()
     except (KeyboardInterrupt):
         sys.exit(1)
 
@@ -100,9 +100,9 @@ if __name__ == '__main__':
             message, address = s.recvfrom(5)
             if message == b'#Hi':
                 print('Got a heart beat')
-                local_ip = str(address[0])
-                f = open('local_ip.txt','w')
-                f.write(local_ip)
+                ip = str(address[0])
+                f = open('ip.txt','w')
+                f.write(ip)
                 f.close()
                 print('home ip is written')
 
