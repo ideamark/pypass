@@ -1,0 +1,7 @@
+[params]
+# Enter your remote server ip here
+remote_ip = 
+
+# The format is: local_port:middle_port:remote_port, and split multiple items by ",".
+# For example: 22:10000:222, 80:10001:8880
+ports_list = 

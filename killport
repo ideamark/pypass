@@ -1,0 +1,14 @@
+#!/bin/bash
+PORT=$1
+if [[ ! -n $PORT ]]; then
+    echo 'Please enter the port'
+    exit 1
+fi
+
+PID=`lsof -i :$PORT | sed -n '$p' | awk '{print $2}'`
+if [[ ! -n $PID ]]; then
+    echo 'Can not find the port'
+    exit 1
+fi
+
+kill -9 $PID

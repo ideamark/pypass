@@ -1,23 +1,19 @@
-# pyDDNS V1.0.1
+# pyPass
 
 ## Overview
-* pyDDNS is a simple python DDNS server which is just like Oray server.
-* But it is faster and more stable than Oray server.
+* pyPass is an easy config TCP tunnel server to map local ports to remote ports.
+* The basic code comes from https://github.com/aploium/shootback, the author is Aploium, thanks for the sharing.
 
 ## How to use
-* First, you should have an independent IP server as your remote server, like Aliyun ECS or other VPS. And scp the proxy folder to your remote server.
-* Then, enter the configure value in the local.py and remote.py. 
-* Finally, run local.py on your local server and run remote.py on your remote server, wait for the heart beat send to remote.py, if it displays "Got a heart beat" and "home ip is written", it means connection is succeeded. 
+1. make sure you have installed python3, python3-pip. If not, install them before next step.
+2. "git clone https://github.com/ideamark/pyPass" to download pyPass to your local server.
+3. Write params to "config" file.
+4. Copy the whole pyPass folder to the remote server.
+5. Execute local.py on local server and execute remote.py on remote server. Then access the remote ports will access your local ports!
 
 ## how to execute when boot up
-* Add this to /etc/rc.local before "exit 0":
- * your_dir/local.py &
+* Written command in /etc/rc.local before "exit 0"
 
-## How does it work
-* The local server send the public IP to the remote server by sending heart beat signal (UDP).
-* The remote server will get the local public IP and transfer the ports between remote and local by socket.
-* The code can also check the port which it opend is open or close, if close, it can reconnect automatically.
-
-## To know more
+## Seek more
 * Author: Mark Young
 * Email: ideamark@qq.com
