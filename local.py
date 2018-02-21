@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 from __future__ import print_function, unicode_literals, division, absolute_import
-from multiprocessing import Process
-import os
 
 from common import *
 
@@ -151,7 +149,7 @@ class Local(object):
             try:
                 conn_local = self._connect_remote()
             except Exception as e:
-                log.warning("unable to connect remote {}".format(e))
+                log.warning(e)
                 log.debug(traceback.format_exc())
                 time.sleep(err_delay)
                 if err_delay < max_err_delay:
@@ -180,6 +178,8 @@ class Local(object):
                 continue
 
             err_delay = 0
+
+        time.sleep(3)
 
 
 def local_processing(mid_port, local_port):

@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 from __future__ import print_function, unicode_literals, division, absolute_import
 from configobj import ConfigObj
+from multiprocessing import Process
+import os
 import sys
 import time
 import binascii
@@ -12,7 +14,6 @@ import select
 import threading
 import traceback
 import functools
-import os
 
 try:
     from typing import Union, Callable

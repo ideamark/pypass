@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 import atexit
 from common import *
-from multiprocessing import Process
-import os
 import queue
 
 _listening_sockets = []
@@ -162,6 +160,7 @@ class Remote(object):
                 log.debug("heartbeat success: {}, time: {}ms".format(
                     fmt_addr(addr_local), time_used))
                 self.local_pool.append(local)
+        time.sleep(3)
 
     @staticmethod
     def _handshake(conn_local):
