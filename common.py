@@ -12,13 +12,15 @@ import select
 import threading
 import traceback
 import functools
+import os
 
 try:
     from typing import Union, Callable
 except Exception:
     pass
 
-cfg = ConfigObj('config')['params']
+config_path = os.path.join(os.path.dirname(__file__), 'config')
+cfg = ConfigObj(config_path)['params']
 REMOTE_IP = cfg['remote_ip']
 PORTS_LIST = cfg['ports_list']
 SECRET_KEY = 'pyPass'

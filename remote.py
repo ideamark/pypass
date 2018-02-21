@@ -282,7 +282,9 @@ if __name__ == '__main__':
     for ports in PORTS_LIST:
         mid_port = ports.split(':')[1]
         remote_port = ports.split(':')[2]
-        os.system('bash killport %s' % mid_port)
-        os.system('bash killport %s' % remote_port)
+        killport_path = os.path.join(os.path.dirname(__file__), 'killport')
+        os.system('bash %s %s' % (killport_path, mid_port))
+        os.system('bash %s %s' % (killport_path, remote_port))
+        print('start remote processing (%s)' % ports)
         p = Process(target=remote_processing, args=(mid_port, remote_port,))
         p.start()

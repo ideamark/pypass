@@ -193,6 +193,8 @@ if __name__ == '__main__':
     for ports in PORTS_LIST:
         mid_port = ports.split(':')[1]
         local_port = ports.split(':')[0]
-        os.system('bash killport %s' % mid_port)
+        killport_path = os.path.join(os.path.dirname(__file__), 'killport')
+        os.system('bash %s %s' % (killport_path, mid_port))
+        print('start local processing (%s)' % ports)
         p = Process(target=local_processing, args=(mid_port, local_port,))
         p.start()
