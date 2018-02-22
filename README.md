@@ -6,10 +6,11 @@
 
 ## How to use
 1. Make sure you have installed python3, python3-pip. If not, install them before next step.
-2. "git clone https://github.com/ideamark/pyPass" to download pyPass to your local server.
+2. Run command "git clone https://github.com/ideamark/pyPass" to download pyPass to your local server.
 3. Write params to "config" file.
 4. Copy the whole pyPass folder to the remote server.
 5. Execute local.py on local server and execute remote.py on remote server. Then access the remote ports will access your local ports!
+6. If there is an error like: "No module named 'xxx'", run command: "sudo pip3 install xxx" to install it.
 
 ## Execute when boot up
 * Write command in /etc/rc.local before "exit 0"

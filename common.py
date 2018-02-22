@@ -24,6 +24,8 @@ config_path = os.path.join(os.path.dirname(__file__), 'config')
 cfg = ConfigObj(config_path)['params']
 REMOTE_IP = cfg['remote_ip']
 PORTS_LIST = cfg['ports_list']
+if type(PORTS_LIST) is not list:
+    PORTS_LIST = [PORTS_LIST]
 SECRET_KEY = 'pyPass'
 SPARE_TTL = 300
 MAX_SPARE_COUNT = 5
